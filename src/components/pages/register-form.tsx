@@ -2,6 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import zod from 'zod'
 
+import { useSteps } from '@/contexts/steps'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import { Label } from '../ui/label'
@@ -16,11 +17,9 @@ const registerFormSchema = zod.object({
 
 type RegisterFormSchema = zod.infer<typeof registerFormSchema>
 
-interface RegisterFormProps {
-  onChangeStep: () => void
-}
+export const RegisterForm = () => {
+  const { onNextStep } = useSteps()
 
-export const RegisterForm = ({ onChangeStep }: RegisterFormProps) => {
   const {
     register,
     handleSubmit,
@@ -36,7 +35,7 @@ export const RegisterForm = ({ onChangeStep }: RegisterFormProps) => {
   function onSubmit(data: RegisterFormSchema) {
     console.log(data)
 
-    onChangeStep()
+    onNextStep()
   }
 
   return (

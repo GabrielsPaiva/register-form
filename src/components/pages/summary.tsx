@@ -1,9 +1,6 @@
+import { useSteps } from '@/contexts/steps'
 import { tv } from 'tailwind-variants'
 import { Button } from '../ui/button'
-
-interface SummaryProps {
-  onChangeStep: () => void
-}
 
 const text = tv({
   base: 'text-base font-medium text-left',
@@ -15,11 +12,13 @@ const text = tv({
   },
 })
 
-export const Summary = ({ onChangeStep }: SummaryProps) => {
+export const Summary = () => {
+  const { onNextStep } = useSteps()
+
   const topics = ['React', 'Tailwind CSS', 'TypeScript']
 
   function handleReturn() {
-    onChangeStep()
+    onNextStep()
   }
 
   return (

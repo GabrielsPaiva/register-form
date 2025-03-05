@@ -2,13 +2,10 @@ import { Controller, useForm } from 'react-hook-form'
 import { Button } from '../ui/button'
 import { Checkbox } from '../ui/checkbox'
 
+import { useSteps } from '@/contexts/steps'
 import { zodResolver } from '@hookform/resolvers/zod'
 import type { CheckedState } from '@radix-ui/react-checkbox'
 import zod from 'zod'
-
-interface TopicsFormProps {
-  onChangeStep: () => void
-}
 
 const topics = [
   {
@@ -35,7 +32,9 @@ const topicsFormSchema = zod.object({
 
 type TopicsFormSchema = zod.infer<typeof topicsFormSchema>
 
-export const TopicsForm = ({ onChangeStep }: TopicsFormProps) => {
+export const TopicsForm = () => {
+  const { onNextStep } = useSteps()
+
   const { control, handleSubmit } = useForm<TopicsFormSchema>({
     resolver: zodResolver(topicsFormSchema),
     defaultValues: {
@@ -44,7 +43,7 @@ export const TopicsForm = ({ onChangeStep }: TopicsFormProps) => {
   })
 
   function onTopicsFormSubmit(_data: TopicsFormSchema) {
-    onChangeStep()
+    onNextStep()
   }
 
   return (
