@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import zod from 'zod'
 
 import { useSteps } from '@/contexts/steps'
+import { useUserData } from '@/contexts/user/user'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import { Label } from '../ui/label'
@@ -19,6 +20,7 @@ type RegisterFormSchema = zod.infer<typeof registerFormSchema>
 
 export const RegisterForm = () => {
   const { onNextStep } = useSteps()
+  const { userData, onRegisterUser } = useUserData()
 
   const {
     register,
@@ -27,14 +29,17 @@ export const RegisterForm = () => {
   } = useForm<RegisterFormSchema>({
     resolver: zodResolver(registerFormSchema),
     defaultValues: {
-      name: 'Gabriel',
-      email: 'gabrielpaiva423@gmail.com',
+      name: userData?.name || '',
+      email: userData?.email || '',
     },
   })
 
-  function onSubmit(data: RegisterFormSchema) {
-    console.log(data)
-
+  function onSubmit({ email, name }: RegisterFormSchema) {
+    onRegisterUser({
+      id: crypto.randomUUID(),
+      name,
+      email,
+    })
     onNextStep()
   }
 

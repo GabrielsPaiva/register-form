@@ -3,46 +3,35 @@ import { Button } from '../ui/button'
 import { Checkbox } from '../ui/checkbox'
 
 import { useSteps } from '@/contexts/steps'
+import { possibleTopics, topics } from '@/contexts/user/types'
+import { useUserData } from '@/contexts/user/user'
 import { zodResolver } from '@hookform/resolvers/zod'
 import type { CheckedState } from '@radix-ui/react-checkbox'
 import zod from 'zod'
 
-const topics = [
-  {
-    id: 'software-development',
-    label: 'Software Development',
-  },
-  {
-    id: 'user-experience',
-    label: 'User Experience',
-  },
-  {
-    id: 'graphic-design',
-    label: 'Graphic Design',
-  },
-] as const
-
 const topicsFormSchema = zod.object({
-  topics: zod
-    .array(
-      zod.enum(['software-development', 'user-experience', 'graphic-design'])
-    )
-    .optional(),
+  topics: zod.array(zod.enum(possibleTopics)).optional(),
 })
 
 type TopicsFormSchema = zod.infer<typeof topicsFormSchema>
 
 export const TopicsForm = () => {
   const { onNextStep } = useSteps()
+  const { userData, onSaveUserTopics } = useUserData()
+
+  const selectedTopics = (userData?.selectedTopics || []).map(topic => topic.id)
 
   const { control, handleSubmit } = useForm<TopicsFormSchema>({
     resolver: zodResolver(topicsFormSchema),
     defaultValues: {
-      topics: [],
+      topics: selectedTopics || [],
     },
   })
 
-  function onTopicsFormSubmit(_data: TopicsFormSchema) {
+  function onTopicsFormSubmit({ topics }: TopicsFormSchema) {
+    if (topics) {
+      onSaveUserTopics(topics)
+    }
     onNextStep()
   }
 

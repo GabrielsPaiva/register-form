@@ -1,4 +1,5 @@
 import { useSteps } from '@/contexts/steps'
+import { useUserData } from '@/contexts/user/user'
 import { tv } from 'tailwind-variants'
 import { Button } from '../ui/button'
 
@@ -14,22 +15,24 @@ const text = tv({
 
 export const Summary = () => {
   const { onNextStep } = useSteps()
-
-  const topics = ['React', 'Tailwind CSS', 'TypeScript']
+  const { userData, onResetUserData } = useUserData()
 
   function handleReturn() {
+    onResetUserData()
     onNextStep()
   }
 
+  const topics = userData?.selectedTopics || []
   return (
     <div className="flex flex-col grow gap-6">
       <div className="space-y-1">
         <p className={text({ text: 'title' })}>
-          Name: <span className={text({ text: 'value' })}>John Doe</span>
+          Name:{' '}
+          <span className={text({ text: 'value' })}>{userData?.name}</span>
         </p>
         <p className={text({ text: 'title' })}>
           Email:{' '}
-          <span className={text({ text: 'value' })}>johndoe@email.com</span>
+          <span className={text({ text: 'value' })}>{userData?.email}</span>
         </p>
       </div>
 
@@ -42,7 +45,7 @@ export const Summary = () => {
           })}
         >
           {topics.map(topic => (
-            <li key={topic}>{topic}</li>
+            <li key={topic.id}>{topic.label}</li>
           ))}
         </ul>
       </div>
@@ -51,7 +54,7 @@ export const Summary = () => {
         onClick={handleReturn}
         className="mt-auto w-32 self-center rounded-3xl bg-primary-foreground text-white font-light transition-[colors_transform] duration-200 hover:scale-105 cursor-pointer"
       >
-        Finish
+        Reset
       </Button>
     </div>
   )

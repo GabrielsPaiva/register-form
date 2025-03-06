@@ -7,6 +7,7 @@ import { StepsDisplay } from './components/steps-display'
 
 import { AnimatePresence, motion } from 'framer-motion'
 import { useSteps } from './contexts/steps'
+import { UserProvider } from './contexts/user/user'
 
 const pages = {
   form: {
@@ -37,25 +38,27 @@ export const App = () => {
         />
 
         <div className="size-full bg-neutral-800 rounded-md p-10 backdrop-opacity-100 overflow-hidden">
-          <AnimatePresence initial={false} mode="popLayout">
-            <motion.div
-              key={currentStep.id}
-              initial={{ translateX: '120%' }}
-              animate={{ translateX: 0 }}
-              exit={{ translateX: '-120%' }}
-              transition={{
-                type: 'spring',
-                stiffness: 150,
-                damping: 15,
-                visualDuration: 0.5,
-              }}
-              className="flex flex-col gap-8 h-full"
-            >
-              <h1 className="text-xl font-semibold">{pageTitle}</h1>
+          <UserProvider>
+            <AnimatePresence initial={false} mode="popLayout">
+              <motion.div
+                key={currentStep.id}
+                initial={{ translateX: '120%' }}
+                animate={{ translateX: 0 }}
+                exit={{ translateX: '-120%' }}
+                transition={{
+                  type: 'spring',
+                  stiffness: 150,
+                  damping: 15,
+                  visualDuration: 0.5,
+                }}
+                className="flex flex-col gap-8 h-full"
+              >
+                <h1 className="text-xl font-semibold">{pageTitle}</h1>
 
-              {currentPage}
-            </motion.div>
-          </AnimatePresence>
+                {currentPage}
+              </motion.div>
+            </AnimatePresence>
+          </UserProvider>
         </div>
 
         <StepsDisplay />
