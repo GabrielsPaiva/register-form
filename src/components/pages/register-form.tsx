@@ -28,8 +28,8 @@ export const RegisterForm = ({ onChangeStep }: RegisterFormProps) => {
   } = useForm<RegisterFormSchema>({
     resolver: zodResolver(registerFormSchema),
     defaultValues: {
-      name: 'Gabriel',
-      email: 'gabrielpaiva423@gmail.com',
+      name: '',
+      email: '',
     },
   })
 
